@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:audio_inspect/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,6 +13,7 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  //firebase authentication
   final _auth = FirebaseAuth.instance;
 
 //form key- helpful in validating email and pasaword
@@ -36,7 +38,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
         validator: (value) {
           RegExp regex = new RegExp(
-              r'^.{3,}$'); // Ensures that the password is at least 6 characters long.
+              r'^.{3,}$'); // Ensures that the password is at least 3 characters long.
           if (value!.isEmpty) {
             return 'First Name cannot be empty';
           }
@@ -72,7 +74,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
         validator: (value) {
           RegExp regex = new RegExp(
-              r'^.{3,}$'); // Ensures that the password is at least 6 characters long.
+              r'^.{3,}$'); // Ensures that the password is at least 3 characters long.
           if (value!.isEmpty) {
             return 'Last Name cannot be empty';
           }
@@ -172,6 +174,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             confirmPasswordEditingController, // Assigns the TextEditingController for this field.
         obscureText: true, // Hides the entered text.
 
+        // Ensures that the password is at least 6 characters long and matches the password entered in the password field.
         validator: (value) {
           if (confirmPasswordEditingController.text.length > 6 &&
               confirmPasswordEditingController.text != value) {
@@ -203,12 +206,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-          register(
-              firstNameEditingController.text,
-              lastNameEditingController.text,
-              emailEditingController.text,
-              passwordEditingController.text,
-              confirmPasswordEditingController.text);
+          signUp(
+            emailEditingController.text,
+            passwordEditingController.text,
+          );
         },
         child: Text("Register",
             textAlign: TextAlign.center,
@@ -273,64 +274,53 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       ),
     );
-    //return const Placeholder();
-
-    // ignore: dead_code
-    // void signUp(String email, String password) async {
-    //   if (_formKey.currentState!.validate(email: email, password: password)
-    //   .then((value) => {
-    //     postDetailsToFirestore();
-    //   }).catchError((e)
-    //    {
-    //     Fluttertoast.showToast(msg: e!.message);
-    //   });
-
-    //   }
   }
-//}
 
-  void register(
-    String firstName,
-    String lastName,
-    String email,
-    String password,
-    String confirmPassword,
-  ) async {
-    // Validate the form
+  //register function
+  void signUp(String email, String password) async {
+    //validate the form
     if (_formKey.currentState!.validate()) {
-      // Check if passwords match
-      if (password != confirmPassword) {
-        Fluttertoast.showToast(msg: "Passwords do not match");
-        return;
-      }
-
-      // Perform user registration
-      await _auth
+      await _auth //creates a new user with the email and password provided
           .createUserWithEmailAndPassword(email: email, password: password)
-          .then((userCredential) async {
-        // Get the user ID
-        String uid = userCredential.user!.uid;
+          .then((value) => {
+                postDetailsToFirestore()
+              }) //if the user is created successfully, it posts the details to the firestore
 
-        // Create a map with user information
-        Map<String, dynamic> userData = {
-          'firstName': firstName,
-          'lastName': lastName,
-          // Add any other user-related data you want to store
-        };
-
-        // Store user information in Firestore
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(uid)
-            .set(userData);
-
-        Fluttertoast.showToast(msg: "Registered Successfully");
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-      }).catchError((e) {
-        Fluttertoast.showToast(msg: e!.message);
+          //catches the error and displays a message to the user
+          .catchError((e) {
+        Fluttertoast.showToast(msg: e!.message); //displays a toast message
       });
     }
+  }
+
+  //function to post the details to the firestore. This function is called when the user is created successfully
+  postDetailsToFirestore() async {
+    //calling our firestore
+    //calling our user model
+    //sending these values
+
+    FirebaseFirestore firebaseFirestore =
+        FirebaseFirestore.instance; //creates an instance of the firestore
+    User? user = _auth.currentUser; //gets the current user
+
+    UserModel userModel = UserModel(); //creates an instance of the user model
+
+    //sets the values of the user model
+    userModel.email = user!.email;
+    userModel.uid = user.uid;
+    userModel.firstname = firstNameEditingController.text;
+    userModel.lastname = lastNameEditingController.text;
+
+    //adds the user to the firestore. It uses the user's uid as the document id. This is useful because it makes it easier to retrieve the user's details
+    await firebaseFirestore
+        .collection("users")
+        .doc(user.uid)
+        .set(userModel.toMap()); //adds the user to the firestore
+    Fluttertoast.showToast(
+        msg: "Account created successfully :)"); //displays a toast message
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (builder) => HomeScreen()),
+        (route) => false); //navigates to the home screen
   }
 }
