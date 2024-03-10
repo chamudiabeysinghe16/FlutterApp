@@ -1,3 +1,4 @@
+//This is the model class that will be used to manage the user data.
 class UserModel {
   String? uid;
   String? email;

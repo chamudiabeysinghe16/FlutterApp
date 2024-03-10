@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart'; //provides widgets and utilities implementing Material Design.
-import 'package:audio_inspect/screens/registration_screen.dart'; //importing registration screen
-import 'package:audio_inspect/screens/home_screen.dart'; //importing home screen
+import 'package:audio_inspect/screens/home_screen.dart';
+import 'package:audio_inspect/screens/registration_screen.dart';
+import 'package:audio_inspect/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart'; // import the necessary package
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -86,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final loginButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),
-      color: Colors.redAccent,
+      color: Color.fromARGB(255, 72, 149, 232),
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
@@ -99,6 +100,20 @@ class _LoginScreenState extends State<LoginScreen> {
             style: TextStyle(
                 fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
           )),
+    );
+
+    // Add a button to navigate to the WelcomeScreen
+    final backButton = TextButton(
+      onPressed: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => WelcomeScreen()),
+        );
+      },
+      child: Text('Back to Welcome'),
+      style: TextButton.styleFrom(
+        primary: Colors.blueAccent, // Button text color
+      ),
     );
 
     return Scaffold(
@@ -116,9 +131,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                        height: 200,
+                        height: 450,
                         child: Image.asset(
-                          "assets/logo.png",
+                          "assets/logo1.jpeg",
                           fit: BoxFit.contain,
                         )),
                     SizedBox(height: 45),
@@ -143,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text(
                               "SignUp",
                               style: TextStyle(
-                                  color: Colors.redAccent,
+                                  color: Color.fromARGB(255, 73, 153, 227),
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15),
                             ),

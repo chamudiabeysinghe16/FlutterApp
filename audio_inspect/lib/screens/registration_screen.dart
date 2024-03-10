@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:audio_inspect/model/user_model.dart';
+import 'package:audio_inspect/screens/home_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'home_screen.dart'; //provides widgets and utilities implementing Material Design.
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -201,7 +201,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     final registerButton = Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
-      color: Colors.red,
+      color: Color.fromARGB(255, 64, 183, 243),
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -244,9 +244,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(
-                    height: 155.0,
+                    height: 170.0,
                     child: Image.asset(
-                      "assets/logo2.png",
+                      "assets/logo1.jpeg",
                       fit: BoxFit.contain,
                     ),
                   ),

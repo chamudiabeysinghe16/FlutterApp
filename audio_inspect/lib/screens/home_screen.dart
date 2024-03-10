@@ -1,8 +1,8 @@
 import 'package:audio_inspect/model/user_model.dart';
+import 'package:audio_inspect/screens/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:audio_inspect/screens/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: <Widget>[
               SizedBox(
                 height: 150,
-                child: Image.asset("assets/logo.png", fit: BoxFit.contain),
+                child: Image.asset("assets/logo1.jpeg", fit: BoxFit.contain),
               ),
               Text(
                 "Welcome Back",
@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ActionChip(
                   label: Text("Get Started"),
                   onPressed: () {
-                    logout(context);
+                    //logout(context);
                   }),
             ],
           ),
@@ -89,10 +89,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // this function will logout the user and navigate to the login screen
+  // the logout function
   Future<void> logout(BuildContext context) async {
-    await FirebaseAuth.instance.signOut(); // logout the user
-    // navigate to the login screen
+    await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => LoginScreen()));
   }
