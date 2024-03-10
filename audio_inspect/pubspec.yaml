@@ -39,6 +39,9 @@ dependencies:
   firebase_auth: ^4.17.4
   firebase_core: ^2.25.4
   fluttertoast: ^8.2.4
+  http: ^0.13.3
+  provider: ^6.0.1 # Use the latest version
+  file_picker: ^4.0.0 # Use the latest version compatible with your project
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +69,9 @@ flutter:
   assets:
     - assets/background1.jpeg
     - assets/logo1.jpeg
+    - assets/nethFM.png
+    - assets/deranaFM.jpeg
+    - assets/background1.jpeg
       
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

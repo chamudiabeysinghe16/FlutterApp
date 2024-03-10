@@ -1,3 +1,4 @@
+import 'package:audio_inspect/dashboard/main_menu_screen.dart';
 import 'package:audio_inspect/model/user_model.dart';
 import 'package:audio_inspect/screens/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -78,10 +79,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     logout(context);
                   }),
               ActionChip(
-                  label: Text("Get Started"),
-                  onPressed: () {
-                    //logout(context);
-                  }),
+                label: Text("Get Started"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainMenuScreen()),
+                  );
+                },
+              ),
             ],
           ),
         ),
